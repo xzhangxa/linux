@@ -28,12 +28,12 @@ int BPF_PROG(hid_y_event, struct hid_bpf_ctx *hctx)
 		   data[7],
 		   data[8]);
 
-	y = data[3] | (data[4] << 8);
+	y = data[6] | (data[7] << 8);
 
 	y = -y;
 
-	data[3] = y & 0xFF;
-	data[4] = (y >> 8) & 0xFF;
+	data[6] = y & 0xFF;
+	data[7] = (y >> 8) & 0xFF;
 
 	bpf_printk("modified event: %02x %02x %02x",
 		   data[0],
@@ -60,12 +60,12 @@ int BPF_PROG(hid_x_event, struct hid_bpf_ctx *hctx)
 	if (!data)
 		return 0; /* EPERM check */
 
-	x = data[1] | (data[2] << 8);
+	x = data[4] | (data[5] << 8);
 
 	x = -x;
 
-	data[1] = x & 0xFF;
-	data[2] = (x >> 8) & 0xFF;
+	data[4] = x & 0xFF;
+	data[5] = (x >> 8) & 0xFF;
 	return 0;
 }
 
@@ -103,8 +103,8 @@ int BPF_PROG(hid_rdesc_fixup, struct hid_bpf_ctx *hctx)
 	 *
 	 * We simply swap the axes here.
 	 */
-	data[39] = 0x31;
-	data[41] = 0x30;
+	//data[62] = 0x31;
+	//data[64] = 0x30;
 
 	return 0;
 }

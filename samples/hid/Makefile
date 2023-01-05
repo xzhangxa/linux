@@ -7,6 +7,7 @@ pound := \#
 
 # List of programs to build
 tprogs-y += hid_mouse
+tprogs-y += hid_keyboard
 tprogs-y += hid_surface_dial
 
 # Libbpf dependencies
@@ -20,6 +21,7 @@ EXTRA_HEADERS := hid_bpf_attach.h
 EXTRA_BPF_HEADERS := hid_bpf_helpers.h
 
 hid_mouse-objs := hid_mouse.o
+hid_keyboard-objs := hid_keyboard.o
 hid_surface_dial-objs := hid_surface_dial.o
 
 # Tell kbuild to always build the programs
@@ -158,6 +160,7 @@ libbpf_hdrs: $(LIBBPF)
 .PHONY: libbpf_hdrs
 
 $(obj)/hid_mouse.o: $(obj)/hid_mouse.skel.h
+$(obj)/hid_keyboard.o: $(obj)/hid_keyboard.skel.h
 $(obj)/hid_surface_dial.o: $(obj)/hid_surface_dial.skel.h
 
 -include $(HID_SAMPLES_PATH)/Makefile.target
@@ -204,10 +207,11 @@ $(obj)/%.bpf.o: $(src)/%.bpf.c $(EXTRA_BPF_HEADERS_SRC) $(obj)/vmlinux.h
 		-I$(LIBBPF_INCLUDE) $(CLANG_SYS_INCLUDES) \
 		-c $(filter %.bpf.c,$^) -o $@
 
-LINKED_SKELS := hid_mouse.skel.h hid_surface_dial.skel.h
+LINKED_SKELS := hid_mouse.skel.h hid_keyboard.skel.h hid_surface_dial.skel.h
 clean-files += $(LINKED_SKELS)
 
 hid_mouse.skel.h-deps := hid_mouse.bpf.o hid_bpf_attach.bpf.o
+hid_keyboard.skel.h-deps := hid_keyboard.bpf.o hid_bpf_attach.bpf.o
 hid_surface_dial.skel.h-deps := hid_surface_dial.bpf.o hid_bpf_attach.bpf.o
 
 LINKED_BPF_SRCS := $(patsubst %.bpf.o,%.bpf.c,$(foreach skel,$(LINKED_SKELS),$($(skel)-deps)))
