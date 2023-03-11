@@ -1486,8 +1486,10 @@ void __init native_smp_cpus_done(unsigned int max_cpus)
 	/* XXX for now assume numa-in-package and hybrid don't overlap */
 	if (x86_has_numa_in_package)
 		set_sched_topology(x86_numa_in_package_topology);
-	if (cpu_feature_enabled(X86_FEATURE_HYBRID_CPU))
+	if (cpu_feature_enabled(X86_FEATURE_HYBRID_CPU)) {
+		pr_info("ZXTEST feature HYBRID_CPU enabled\n");
 		set_sched_topology(x86_hybrid_topology);
+	}
 
 	nmi_selftest();
 	impress_friends();

@@ -3380,9 +3380,15 @@ static int __init intel_pstate_init(void)
 	static struct cpudata **_all_cpu_data;
 	const struct x86_cpu_id *id;
 	int rc;
+	int i;
 
 	if (boot_cpu_data.x86_vendor != X86_VENDOR_INTEL)
 		return -ENODEV;
+
+	for (i = 0; i < nr_cpu_ids; i++) {
+		sched_set_itmt_core_prio((i < nr_cpu_ids / 2) ? 43 : 70, i);
+	}
+	schedule_work(&sched_itmt_work);
 
 	id = x86_match_cpu(hwp_support_ids);
 	if (id) {

@@ -22,6 +22,7 @@
 #include <linux/mutex.h>
 #include <linux/sysctl.h>
 #include <linux/nodemask.h>
+#include <linux/printk.h>
 
 static DEFINE_MUTEX(itmt_update_mutex);
 DEFINE_PER_CPU_READ_MOSTLY(int, sched_core_priority);
@@ -200,6 +201,7 @@ void sched_set_itmt_core_prio(int prio, int core_cpu)
 		 */
 		smt_prio = prio * smp_num_siblings / (i * i);
 		per_cpu(sched_core_priority, cpu) = smt_prio;
+		pr_info("ZXTEST set sched_core_priority of cpu %d to %d\n", cpu, smt_prio);
 		i++;
 	}
 }
