@@ -1509,6 +1509,10 @@ static const u32 emulated_msrs_all[] = {
 	MSR_AMD64_TSC_RATIO,
 	MSR_IA32_POWER_CTL,
 	MSR_IA32_UCODE_REV,
+	MSR_PM_ENABLE,
+	MSR_HWP_CAPABILITIES,
+	MSR_HWP_REQUEST,
+	MSR_IA32_PERF_CTL,
 
 	/*
 	 * The following list leaves out MSRs whose values are determined
@@ -1565,6 +1569,10 @@ static const u32 msr_based_features_all[] = {
 	MSR_IA32_UCODE_REV,
 	MSR_IA32_ARCH_CAPABILITIES,
 	MSR_IA32_PERF_CAPABILITIES,
+	MSR_PM_ENABLE,
+	MSR_HWP_CAPABILITIES,
+	MSR_HWP_REQUEST,
+	MSR_IA32_PERF_CTL,
 };
 
 static u32 msr_based_features[ARRAY_SIZE(msr_based_features_all)];
@@ -3576,6 +3584,7 @@ int kvm_set_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
 	case MSR_AMD64_BU_CFG2:
 	case MSR_AMD64_DC_CFG:
 	case MSR_F15H_EX_CFG:
+	case MSR_IA32_PERF_CTL:
 		break;
 
 	case MSR_IA32_UCODE_REV:

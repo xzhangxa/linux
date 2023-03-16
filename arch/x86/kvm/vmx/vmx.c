@@ -1881,6 +1881,11 @@ static int vmx_get_msr_feature(struct kvm_msr_entry *msr)
 		if (!nested)
 			return 1;
 		return vmx_get_vmx_msr(&vmcs_config.nested, msr->index, &msr->data);
+	case MSR_PM_ENABLE:
+	case MSR_HWP_CAPABILITIES:
+	case MSR_HWP_REQUEST:
+		msr->data = ~0x0;
+		return 0;
 	default:
 		return KVM_MSR_RET_INVALID;
 	}
@@ -2026,6 +2031,15 @@ static int vmx_get_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
 		break;
 	case MSR_IA32_DEBUGCTLMSR:
 		msr_info->data = vmcs_read64(GUEST_IA32_DEBUGCTL);
+		break;
+	case MSR_PM_ENABLE:
+		msr_info->data = vcpu->arch.pm_enable_msr;
+		break;
+	case MSR_HWP_CAPABILITIES:
+		msr_info->data = vcpu->arch.hwp_capabilities_msr;
+		break;
+	case MSR_HWP_REQUEST:
+		msr_info->data = vcpu->arch.hwp_request_msr;
 		break;
 	default:
 	find_uret_msr:
@@ -2387,6 +2401,17 @@ static int vmx_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
 				return 1;
 		}
 		ret = kvm_set_msr_common(vcpu, msr_info);
+		break;
+	case MSR_PM_ENABLE:
+		vcpu->arch.pm_enable_msr = data;
+		break;
+	case MSR_HWP_CAPABILITIES:
+		if (!msr_info->host_initiated)
+			return 1;
+		vcpu->arch.hwp_capabilities_msr = data;
+		break;
+	case MSR_HWP_REQUEST:
+		vcpu->arch.hwp_request_msr = data;
 		break;
 
 	default:

@@ -739,6 +739,9 @@ struct kvm_vcpu_arch {
 	int32_t apic_arb_prio;
 	int mp_state;
 	u64 ia32_misc_enable_msr;
+	u64 pm_enable_msr;
+	u64 hwp_capabilities_msr;
+	u64 hwp_request_msr;
 	u64 smbase;
 	u64 smi_count;
 	bool at_instruction_boundary;
