@@ -346,11 +346,14 @@ static void intel_pstate_set_itmt_prio(int cpu)
 {
 	struct cppc_perf_caps cppc_perf;
 	static u32 max_highest_perf = 0, min_highest_perf = U32_MAX;
-	int ret;
+	//int ret;
 
-	ret = cppc_get_perf_caps(cpu, &cppc_perf);
-	if (ret)
-		return;
+	/*
+	 * ret = cppc_get_perf_caps(cpu, &cppc_perf);
+	 * if (ret)
+	 *	return;
+	 */
+	cppc_perf.highest_perf = CPPC_MAX_PERF;
 
 	/*
 	 * On some systems with overclocking enabled, CPPC.highest_perf is hardcoded to 0xff.
