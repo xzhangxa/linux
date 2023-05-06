@@ -1,0 +1,6 @@
+config HYBRID_SHM
+	bool "KVM IVSHMEM hybrid CPU perf value sharing driver"
+	depends on PCI
+	help
+	  This option enables KVM IVSHMEM PCIe driver for sharing hybrid CPU
+          per core performance value.
